@@ -1,0 +1,22 @@
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* deckRevealedIncreasing(int* deck, int deckSize, int* returnSize) {
+    *returnSize = deckSize;
+    int* arr = calloc(deckSize, sizeof(int));
+    int i, j, key, up = 1, front;
+    for (i = 1; i < deckSize; i++) { 
+        key = deck[i];
+        for (j = i - 1; j >= 0 && deck[j] > key; j--)
+            deck[j + 1] = deck[j];
+        deck[j + 1] = key;
+    }
+    for (i = front = 0, up = 1; i < deckSize; front = ++front % deckSize)
+        if (!up && !arr[front])
+            up = !up;
+        else if (up && !arr[front]) {
+            arr[front] = deck[i++];
+            up = !up; 
+        }
+    return arr;
+}
